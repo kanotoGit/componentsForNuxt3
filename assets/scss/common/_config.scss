@@ -1,0 +1,9 @@
+// カラー
+$_red: #f34949;
+$_green: #11b111;
+$_blue: #495ef3;
+
+:root {
+  --primary: #{$_blue};
+  --secandary: #{$_green};
+}

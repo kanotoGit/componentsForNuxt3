@@ -5,22 +5,9 @@
     "dev": "nuxt dev --dotenv .env.development",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "@babel/core": "^7.21.0",
-    "@storybook/addon-actions": "^6.5.16",
-    "@storybook/addon-essentials": "^6.5.16",
-    "@storybook/addon-interactions": "^6.5.16",
-    "@storybook/addon-links": "^6.5.16",
-    "@storybook/builder-vite": "^0.4.2",
-    "@storybook/testing-library": "^0.0.13",
-    "@storybook/vue3": "^6.5.16",
-    "babel-loader": "^8.3.0",
-    "nuxt": "^3.2.0",
-    "vue-loader": "^16.8.3"
-  },
-  "dependencies": {}
+    "nuxt": "^3.2.0"
+  }
 }

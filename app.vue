@@ -4,9 +4,9 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const config = useRuntimeConfig()
-console.log(config.public.nuxtEnv);
+console.log(config.public.nuxtEnv)
 </script>
 
 <style lang="scss">

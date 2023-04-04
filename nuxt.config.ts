@@ -6,8 +6,8 @@ export default defineNuxtConfig({
   // 環境変数
   runtimeConfig: {
     public: {
-      // @ts-ignore
-      nuxtEnv: process.env.NUXT_ENV
+      nuxtEnv: process.env.NUXT_ENV,
+      apiUrl: process.env.NUXT_API_URL
     }
   }
 })

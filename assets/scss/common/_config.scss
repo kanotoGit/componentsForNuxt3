@@ -4,6 +4,12 @@ $_green: #11b111;
 $_blue: #495ef3;
 
 :root {
+  // color
   --primary: #{$_blue};
   --secandary: #{$_green};
+
+  // size
+  --form-item-height: 30px;
+
+  //
 }

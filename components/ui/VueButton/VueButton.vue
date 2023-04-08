@@ -14,12 +14,12 @@ const props = defineProps({
     default: 'primary'
   },
   // 非アクティブ判定
-  isDisabled: {
+  disabled: {
     type: Boolean,
     default: false,
   },
 })
-const { type, isDisabled, color } = props
+const { type, disabled, color } = props
 
 /** emit */
 const emit = defineEmits<{
@@ -35,7 +35,7 @@ const buttonColorStyle = computed(() => {
  * ボタン押下イベント
  */
 function onClick() {
-  if (!isDisabled) {
+  if (!disabled) {
     emit('click')
   }
 }
@@ -44,7 +44,7 @@ function onClick() {
 <template>
   <button
     :type="type"
-    :disabled="isDisabled"
+    :disabled="disabled"
     class="vue-button"
     :style="{ ...buttonColorStyle }"
     @click="onClick"
@@ -55,6 +55,7 @@ function onClick() {
 
 <style lang="scss" scoped>
 .vue-button {
+  min-height: var(--form-item-height);
   display: inline-flex;
   align-items: center;
   justify-content: center;

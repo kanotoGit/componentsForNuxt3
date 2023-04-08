@@ -22,7 +22,7 @@ export default defineEventHandler(async (event): Promise<LoginResponse | null> =
   throw createError({
     message: 'ID もしくは パスワードが間違っています。',
     stack: '',
-    statusCode: 400,
+    statusCode: 401,
     statusMessage: 'Invalid credentials'
   })
 })

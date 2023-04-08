@@ -9,5 +9,10 @@ export default defineNuxtConfig({
       nuxtEnv: process.env.NUXT_ENV,
       apiUrl: process.env.NUXT_API_URL
     }
-  }
+  },
+
+  // コンポーネントの自動読み込み
+  components: [
+    '@/components/ui'
+  ],
 })

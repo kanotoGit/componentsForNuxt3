@@ -8,7 +8,7 @@ export default {
       const { data } = await client().post('/login', body)
       return (data as LoginResponse) ?? null
     } catch (error) {
-      // Promise.reject(error)
+      console.error(error)
       return null
     }
   }

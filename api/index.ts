@@ -1,5 +1,5 @@
-import login from './apis/login'
+import auth from './apis/auth'
 
 export default {
-  login
+  auth
 }

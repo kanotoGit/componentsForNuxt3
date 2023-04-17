@@ -68,8 +68,7 @@ function errorProcess (error: AxiosError<any, any>) {
 
     const { data } = response
     if (data instanceof Blob) {
-      // レスポンスがBlobの場合のエラー処理
-
+      // NOTE: レスポンスがBlobの場合のエラー処理
     } else {
       switch (response.status) {
         case 401:

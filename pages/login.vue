@@ -1,32 +1,18 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
-
-const id = ref<string | null>(null)
-const password = ref<string | null>(null)
-const { $api } = useNuxtApp()
+import { useAuthStore } from '@/stores/auth'
 
 /* メタ定義 **/
 definePageMeta({
-  layout: 'simple',
+  layout: 'simple'
 })
 
+/** ログイン情報 */
+const id = ref<string>('')
+const password = ref<string>('')
+
 /** ログイン処理 */
-async function login() {
-  try {
-    if (id.value && password.value) {
-      const response = await $api.auth.registLogin({
-        id: id.value,
-        password: password.value
-      })
-      // TODO: 成功時、piniaにデータ格納
-      console.log(response)
-    } else {
-      // TODO: エラー処理
-    }
-  } catch (error) {
-    // NOTE: 共通エラーを出力するため処理無し
-  }
-}
+const { login } = useAuthStore()
 </script>
 
 <template>
@@ -34,11 +20,15 @@ async function login() {
     <form class="form" @submit.prevent>
       <dl class="inner">
         <dt>ID:</dt>
-        <dd><TextField type="text" v-model:value="id"></TextField></dd>
+        <dd><TextField v-model:value="id" type="text" /></dd>
         <dt>パスワード:</dt>
-        <dd><TextField type="password" v-model:value="password"></TextField></dd>
+        <dd><TextField v-model:value="password" type="password" /></dd>
         <dt><!-- スペーサー --></dt>
-        <dd><VueButton type="submit" @click="login">ログイン</VueButton></dd>
+        <dd>
+          <VueButton type="submit" @click="login(id, password)">
+            ログイン
+          </VueButton>
+        </dd>
       </dl>
     </form>
   </section>

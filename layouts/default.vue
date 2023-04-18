@@ -4,7 +4,7 @@ import VueHeader from '@/components/features/GlobalHeader/GlobalHeader.vue'
 
 <template>
   <main class="container default">
-    <VueHeader></VueHeader>
+    <VueHeader />
     <slot />
   </main>
 </template>

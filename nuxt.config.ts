@@ -15,4 +15,8 @@ export default defineNuxtConfig({
   components: [
     '@/components/ui'
   ],
+
+  modules: [
+    '@pinia/nuxt'
+  ]
 })

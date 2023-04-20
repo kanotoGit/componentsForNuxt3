@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { toRefs, useAttrs } from 'vue'
-import { isNumber } from '@/utils/functionals/validation';
+import { isNumber } from '@/utils/index';
 
 /** 入力値リセット用 */
 // const isShowInput = ref<boolean>(true)
@@ -28,7 +28,7 @@ const props = defineProps({
     default: false,
   },
 })
-const { text, type,  disabled } = toRefs(props)
+const { text, type, disabled } = toRefs(props)
 
 /** $attrs */
 const $attrs = useAttrs()

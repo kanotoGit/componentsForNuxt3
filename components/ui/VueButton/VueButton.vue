@@ -10,7 +10,7 @@ const props = defineProps({
   },
   // ボタンカラー
   color: {
-    type: String as PropType<'primary' | 'secondary'>,
+    type: String as PropType<'primary' | 'secandary'>,
     default: 'primary'
   },
   // 非アクティブ判定

@@ -2,16 +2,29 @@
 $red: #f34949;
 $green: #11b111;
 $blue: #495ef3;
-$black: #000;
+$white: #f1f1f1;
+$black: #333;
+$gray: #aaa;
 
 :root {
   // color
   --primary: #{$blue};
   --secandary: #{$green};
-  --overlay-color: #{rgba($black, 0.6)};
+  --overlay-color: #{rgba($black, 0.7)};
+  --modal-color: #{$white};
+  --separator-color: #{$gray};
 
-  // size
+  // width / height
   --form-item-height: 30px;
+
+  // space
+  --space-tiny: 8px;
+  --space-small: 12px;
+  --space-regular: 16px;
+  --space-large: 20px;
+  --space-big: 32px;
+  --space-huge: 40px;
+  --space-grant: 60px;
 
   // z-index
   --zindex-modal: 1000; // アラート / モーダル

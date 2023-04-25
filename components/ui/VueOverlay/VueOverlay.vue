@@ -28,12 +28,16 @@ const emit = defineEmits<{
 
 /** 要素がDOMに挿入された後の処理 */
 const onEnter = () => {
-  if (open.value) {
-    // 開く処理
-    overlay?.value?.showModal?.()
+  if (overlay?.value) {
+    if (open.value) {
+      // 開く処理
+      overlay.value.showModal()
+    } else {
+      // 閉じる処理
+      overlay.value.close()
+    }
   } else {
-    // 閉じる処理
-    overlay?.value?.close?.()
+    console.error('オーバーレイを開けませんでした。')
   }
 }
 </script>
@@ -42,6 +46,7 @@ const onEnter = () => {
   <div data-component="VueOverlay">
     <Transition
       :name="isDisabledAnimation ? undefined : `animate`"
+      appear
       @enter="onEnter"
       @afterEnter="emit('opened')"
       @afterLeave="emit('closed')"

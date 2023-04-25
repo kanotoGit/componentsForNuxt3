@@ -10,8 +10,13 @@ const props = defineProps({
   },
   // ボタンカラー
   color: {
-    type: String as PropType<'primary' | 'secandary'>,
+    type: String,
     default: 'primary'
+  },
+  // ボタンカラーの明度
+  isDarkColor: {
+    type: Boolean,
+    default: true,
   },
   // 非アクティブ判定
   disabled: {
@@ -19,7 +24,7 @@ const props = defineProps({
     default: false,
   },
 })
-const { type, disabled, color } = props
+const { type, disabled, color, isDarkColor } = props
 
 /** emit */
 const emit = defineEmits<{
@@ -28,7 +33,10 @@ const emit = defineEmits<{
 
 /** ボタンの色指定 */
 const buttonColorStyle = computed(() => {
-  return { backgroundColor: `var(--${color})` }
+  return {
+    backgroundColor: `var(--${color})`,
+    color: isDarkColor ? 'var(--text-color-white)' : 'var(--text-color)',
+  }
 })
 
 /**

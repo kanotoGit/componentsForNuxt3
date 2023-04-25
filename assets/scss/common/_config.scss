@@ -7,12 +7,19 @@ $black: #333;
 $gray: #aaa;
 
 :root {
-  // color
+  // theme color
   --primary: #{$blue};
   --secandary: #{$green};
+  --error: #{$red};
+  --emphasis: #{$red};
+
+  // object color
+  --text-color: #{$black};
+  --text-color-white: #{$white};
   --overlay-color: #{rgba($black, 0.7)};
   --modal-color: #{$white};
   --separator-color: #{$gray};
+  --negative-button-color: #363636;
 
   // width / height
   --form-item-height: 30px;

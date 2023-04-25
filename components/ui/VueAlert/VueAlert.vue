@@ -1,8 +1,12 @@
 <script lang="ts" setup>
 import { PropType } from 'vue';
 import { defineProps, toRefs, computed } from 'vue'
+
 import VueButton from '@/components/ui/VueButton/VueButton.vue'
 import VueOverlay from '@/components/ui/VueOverlay/VueOverlay.vue'
+
+import { ALERT_TYPE } from '@/utils';
+import { AlertType } from '@/types/alert';
 
 const props = defineProps({
   /** オーバーレイの開閉状態 */
@@ -20,8 +24,13 @@ const props = defineProps({
     type: Object as PropType<object | null>,
     default: null,
   },
+  /** アラートの種類 */
+  type: {
+    type: String as PropType<AlertType>,
+    default: ALERT_TYPE.CONFIRM,
+  }
 })
-const { open, text } = toRefs(props)
+const { open, text, type } = toRefs(props)
 
 /** アラートの開閉状態 */
 const isOpenAlert = computed({
@@ -33,14 +42,34 @@ const isOpenAlert = computed({
   },
 })
 
+/** アラートの種類 */
+const isConfirm = computed(() => type.value === ALERT_TYPE.CONFIRM)
+const isNotice = computed(() => type.value === ALERT_TYPE.NOTICE)
+const isError = computed(() => type.value === ALERT_TYPE.ERROR)
+
+/** ポジティブボタンの色 */
+const positiveButtonColor = computed(() => {
+  if (isNotice.value) {
+    return 'secandary'
+  } else if (isError.value) {
+    return 'error'
+  } else {
+    return 'primary'
+  }
+})
+
 /** emit */
 const emit = defineEmits<{
-  // アラートの開閉判定 更新
+  /** アラートの開閉判定 更新 */
   (event: 'update:open', isOpen: Boolean): void
-  // ポジティブボタン 押下イベント
+  /** ポジティブボタン 押下イベント */
   (event: 'clickPositive'): void
-  // ネガティブボタン 押下イベント
+  /** ネガティブボタン 押下イベント */
   (event: 'clickNegative'): void
+  /** アラート 開くイベント */
+  (event: 'opened'): void
+  /** アラート 閉じるイベント */
+  (event: 'closed'): void
 }>()
 
 /** ポジティブボタン 押下イベント */
@@ -58,16 +87,16 @@ const clickNegative = () => {
 
 <template>
   <div data-component="VueAlert">
-    <VueOverlay :open="isOpenAlert">
-      <div class="contents">
+    <VueOverlay :open="isOpenAlert" @opened="emit('opened')" @closed="emit('closed')" >
+      <div class="contents" :class="[ type ]">
         <div class="contents-text">
           <!-- テキスト表示 -->
           <p v-if="text" v-text="text" class="text"></p>
           <!-- TODO: コンポーネント表示 -->
         </div>
         <div class="contents-buttons">
-          <VueButton color="secandary" @click="clickNegative">キャンセル</VueButton>
-          <VueButton @click="clickPositive">OK</VueButton>
+          <VueButton v-if="isConfirm" color="negative-button-color" @click="clickNegative">キャンセル</VueButton>
+          <VueButton :color="positiveButtonColor" @click="clickPositive">OK</VueButton>
         </div>
       </div>
     </VueOverlay>

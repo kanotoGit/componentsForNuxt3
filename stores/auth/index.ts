@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { UserInfo } from '@/types/api'
+import { MESSAGE_EMPTY_LOGIN } from '@/utils'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -17,23 +18,23 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     /** ログイン処理 */
     async login (id: string, password: string): Promise<boolean> {
-      const { $api } = useNuxtApp()
+      const { $api, $dialog } = useNuxtApp()
       try {
         if (id && password) {
           const response = await $api.auth.registLogin({
             id,
             password
           })
-          if (response) {
-            // ログイン成功
-            this.changeLoginUser(response.userInfo)
-            this.changeToken(response.token)
-            return true
-          }
+          // ログイン成功
+          this.changeLoginUser(response.userInfo)
+          this.changeToken(response.token)
+          return true
+        } else {
+          // ID or パスワードが空の場合はエラー
+          this.logout()
+          $dialog.error(MESSAGE_EMPTY_LOGIN)
+          return false
         }
-        // ログイン失敗
-        this.logout()
-        return false
       } catch (error) {
         console.error(error)
         // ログイン失敗

@@ -1,4 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from 'axios'
+import { useAlertStore } from '@/stores/alert'
+import { storeToRefs } from 'pinia';
+import { MESSAGE_ERROR } from '@/utils';
 
 /** APIクライアントのオプション */
 export interface ClientOptions {
@@ -7,7 +10,7 @@ export interface ClientOptions {
   isRequiredAuth?: boolean; // 認証の必要有無
 }
 const defaultOptions: ClientOptions = {
-  isShowLoading: false,
+  isShowLoading: true,
   isRequiredAuth: false
 }
 
@@ -59,13 +62,13 @@ export const client = (options?: ClientOptions) => {
 }
 
 /** エラー処理 */
-function errorProcess (error: AxiosError<any, any>) {
+function errorProcess(error: AxiosError<any, any>) {
+  const { $dialog } = useNuxtApp()
+  const alertStore = useAlertStore()
+  const { getAlertList } = storeToRefs(alertStore)
   // NOTE: この辺の処理は各プロジェクトで要相談
   const { response } = error
   if (response) {
-    // TODO: 既にエラーダイアログが出力している場合は表示しない
-    // if () {}
-
     const { data } = response
     if (data instanceof Blob) {
       // NOTE: レスポンスがBlobの場合のエラー処理
@@ -73,21 +76,28 @@ function errorProcess (error: AxiosError<any, any>) {
       switch (response.status) {
         case 401:
           // エラー出力(401)
-          break
+          $dialog.error(data.message)
+          break;
         case 403:
           // エラー出力(403)
-          break
+          $dialog.error(data.message)
+          break;
         case 404:
           // エラー出力(404)
-          break
+          $dialog.error(data.message)
+          break;
         case 422:
           // エラー出力(422)
-          break
+          $dialog.error(data.message)
+          break;
         default:
           // その他エラーコードの出力
-          break
+          $dialog.error(data.message)
+          break;
       }
     }
+  } else {
+    // 汎用エラーの出力
+    $dialog.error(MESSAGE_ERROR)
   }
-  // TODO: 汎用エラーの出力
 }

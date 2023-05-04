@@ -4,6 +4,7 @@ import { storeToRefs } from 'pinia'
 import _ from 'lodash'
 import { useAlertStore } from '@/stores/alert'
 import { AlertInfo } from '@/types/alert'
+import { MESSAGE_ERROR } from '@/utils'
 
 // 環境変数 表示のみ
 const config = useRuntimeConfig()
@@ -11,7 +12,6 @@ console.log(config.public.nuxtEnv)
 
 const alertStore = useAlertStore()
 const { getAlertList } = storeToRefs(alertStore)
-
 const alertList = ref<AlertInfo[]>([])
 
 watch(getAlertList, (list: AlertInfo[]) => {
@@ -36,6 +36,16 @@ const clickAlertButton = (isOk: boolean, alertInfo: AlertInfo) => {
 const closeAlert = (alertInfo: AlertInfo) => {
   alertInfo.closeFunction(alertInfo.id)
 }
+
+/** エラーハンドリング */
+window.addEventListener('error', () => {
+  console.log('error')
+  showError(MESSAGE_ERROR)
+})
+window.addEventListener('unhandledrejection', () => {
+  console.log('unhandledrejection')
+  showError(MESSAGE_ERROR)
+})
 </script>
 
 <template>

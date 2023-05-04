@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { storeToRefs } from 'pinia';
-import { cloneDeep } from 'lodash'
+import { storeToRefs } from 'pinia'
+import _ from 'lodash'
 import { useAlertStore } from '@/stores/alert'
-import { AlertInfo } from '@/types/alert';
+import { AlertInfo } from '@/types/alert'
 
 // 環境変数 表示のみ
 const config = useRuntimeConfig()
@@ -15,9 +15,9 @@ const { getAlertList } = storeToRefs(alertStore)
 const alertList = ref<AlertInfo[]>([])
 
 watch(getAlertList, (list: AlertInfo[]) => {
-  alertList.value = cloneDeep(list)
+  alertList.value = _.cloneDeep(list)
 }, {
-  deep: true,
+  deep: true
 })
 
 /**
@@ -33,7 +33,7 @@ const clickAlertButton = (isOk: boolean, alertInfo: AlertInfo) => {
  * アラート 閉じるイベント
  * @param alertInfo アラート情報
  */
- const closeAlert = (alertInfo: AlertInfo) => {
+const closeAlert = (alertInfo: AlertInfo) => {
   alertInfo.closeFunction(alertInfo.id)
 }
 </script>

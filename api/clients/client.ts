@@ -1,7 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from 'axios'
-import { useAlertStore } from '@/stores/alert'
-import { storeToRefs } from 'pinia';
-import { MESSAGE_ERROR } from '@/utils';
+import { MESSAGE_ERROR } from '@/utils'
 
 /** APIクライアントのオプション */
 export interface ClientOptions {
@@ -62,10 +60,9 @@ export const client = (options?: ClientOptions) => {
 }
 
 /** エラー処理 */
-function errorProcess(error: AxiosError<any, any>) {
+function errorProcess (error: AxiosError<any, any>) {
   const { $dialog } = useNuxtApp()
-  const alertStore = useAlertStore()
-  const { getAlertList } = storeToRefs(alertStore)
+
   // NOTE: この辺の処理は各プロジェクトで要相談
   const { response } = error
   if (response) {
@@ -77,23 +74,23 @@ function errorProcess(error: AxiosError<any, any>) {
         case 401:
           // エラー出力(401)
           $dialog.error(data.message)
-          break;
+          break
         case 403:
           // エラー出力(403)
           $dialog.error(data.message)
-          break;
+          break
         case 404:
           // エラー出力(404)
           $dialog.error(data.message)
-          break;
+          break
         case 422:
           // エラー出力(422)
           $dialog.error(data.message)
-          break;
+          break
         default:
           // その他エラーコードの出力
           $dialog.error(data.message)
-          break;
+          break
       }
     }
   } else {

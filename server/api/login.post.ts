@@ -10,6 +10,7 @@ export default defineEventHandler(async (event): Promise<LoginResponse | null> =
 
   // ユーザデータ探索
   const targetUser = database.find(item => item.id === id)
+  await new Promise(resolve => setTimeout(resolve, 2000))
   if (targetUser) {
     // 成功
     return {

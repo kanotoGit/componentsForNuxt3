@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { RouteLocationNormalized } from 'vue-router'
 import { UserInfo } from '@/types/api'
 import { MESSAGE_EMPTY_LOGIN } from '@/utils'
 
@@ -7,12 +8,22 @@ export const useAuthStore = defineStore('auth', {
     /** ログインユーザ情報 */
     user: null as UserInfo | null,
     /** アクセストークン */
-    token: ''
+    token: '',
+    /** ログインページへのリダイレクト前の遷移先 */
+    beforeRedirectRoute: null as RouteLocationNormalized | null
   }),
   getters: {
     /** ログインユーザ情報 取得 */
     getLoginUser (): UserInfo | null {
       return this.user
+    },
+    /** アクセストークン 取得 */
+    getToken (): string | null {
+      return this.token
+    },
+    /** ログインページへのリダイレクト前の遷移先 取得 */
+    getBeforeRedirectRoute (): RouteLocationNormalized | null {
+      return this.beforeRedirectRoute
     }
   },
   actions: {
@@ -55,6 +66,14 @@ export const useAuthStore = defineStore('auth', {
      */
     changeLoginUser (userInfo: UserInfo | null) {
       this.user = userInfo
+    },
+
+    /**
+     * ログインページへのリダイレクト前の遷移先 更新
+     * @param { RouteLocationNormalized | null } route ログインページへのリダイレクト前の遷移先
+     */
+    changeBeforeRedirectRoute (route: RouteLocationNormalized | null) {
+      this.beforeRedirectRoute = route
     },
 
     /**

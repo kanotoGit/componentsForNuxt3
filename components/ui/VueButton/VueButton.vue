@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineEmits, defineProps, computed } from 'vue'
+import { defineEmits, defineProps, computed, toRefs } from 'vue'
 
 /** props */
 const props = defineProps({
@@ -24,7 +24,7 @@ const props = defineProps({
     default: false,
   },
 })
-const { type, disabled, color, isDarkColor } = props
+const { type, disabled, color, isDarkColor } = toRefs(props)
 
 /** emit */
 const emit = defineEmits<{
@@ -34,7 +34,7 @@ const emit = defineEmits<{
 /** ボタンの色指定 */
 const buttonColorStyle = computed(() => {
   return {
-    backgroundColor: `var(--${color})`,
+    backgroundColor: `var(--${color.value})`,
     color: isDarkColor ? 'var(--text-color-white)' : 'var(--text-color)',
   }
 })
@@ -43,7 +43,7 @@ const buttonColorStyle = computed(() => {
  * ボタン押下イベント
  */
 function onClick() {
-  if (!disabled) {
+  if (!disabled.value) {
     emit('click')
   }
 }
@@ -75,6 +75,7 @@ function onClick() {
   cursor: pointer;
   &:disabled {
     cursor: not-allowed;
+    opacity: 0.3;
   }
 }
 </style>

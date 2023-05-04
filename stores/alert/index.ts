@@ -17,7 +17,7 @@ export const useAlertStore = defineStore('alert', {
      * アラートの追加
      * @param {AlertInfo} data アラート情報
      */
-    addAlert(data: AlertInfo) {
+    addAlert (data: AlertInfo) {
       this.alertList.push(data)
     },
 
@@ -25,10 +25,10 @@ export const useAlertStore = defineStore('alert', {
      * アラートの削除
      * @param {Symbol} id アラートID
      */
-    deleteAlert(id: Symbol) {
+    deleteAlert (id: Symbol) {
       this.alertList = this.alertList.filter(
         item => item.id !== id
       )
-    },
+    }
   }
 })

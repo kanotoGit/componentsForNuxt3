@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-// definePageMeta({
-//   layout: 'simple',
-// })
+definePageMeta({
+  isRequireAuth: true
+})
 </script>
 
 <script lang="ts" setup>

@@ -7,19 +7,19 @@ export default {
    * @param text 表示テキスト
    * @returns
    */
-  confirm(text: string): Promise<boolean> {
+  confirm (text: string): Promise<boolean> {
     const { addAlert, deleteAlert } = useAlertStore()
     return new Promise((resolve) => {
       // アラート情報の登録
       addAlert({
-        id: Symbol(),
+        id: Symbol('アラートID'),
         open: true,
         text,
         alertType: 'confirm',
-        clickFunction(isOk: boolean) {
+        clickFunction (isOk: boolean) {
           resolve(isOk)
         },
-        closeFunction(id: Symbol) {
+        closeFunction (id: Symbol) {
           deleteAlert(id)
         }
       })
@@ -31,19 +31,19 @@ export default {
    * @param text 表示テキスト
    * @returns
    */
-  notice(text: string): Promise<boolean> {
+  notice (text: string): Promise<boolean> {
     const { addAlert, deleteAlert } = useAlertStore()
     return new Promise((resolve) => {
       // アラート情報の登録
       addAlert({
-        id: Symbol(),
+        id: Symbol('アラートID'),
         open: true,
         text,
         alertType: 'notice',
-        clickFunction(isOk: boolean) {
+        clickFunction (isOk: boolean) {
           resolve(isOk)
         },
-        closeFunction(id: Symbol) {
+        closeFunction (id: Symbol) {
           deleteAlert(id)
         }
       })
@@ -55,22 +55,22 @@ export default {
    * @param text 表示テキスト
    * @returns
    */
-  error(text: string): Promise<boolean> {
+  error (text: string): Promise<boolean> {
     const { addAlert, deleteAlert } = useAlertStore()
     return new Promise((resolve) => {
       // アラート情報の登録
       addAlert({
-        id: Symbol(),
+        id: Symbol('アラートID'),
         open: true,
         text,
         alertType: 'error',
-        clickFunction(isOk: boolean) {
+        clickFunction (isOk: boolean) {
           resolve(isOk)
         },
-        closeFunction(id: Symbol) {
+        closeFunction (id: Symbol) {
           deleteAlert(id)
         }
       })
     })
-  },
+  }
 }

@@ -5,3 +5,4 @@ export * from './functionals/validation'
 /** constants */
 export * from './constants/constants'
 export * from './constants/messages'
+export * from './constants/pages'

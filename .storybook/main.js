@@ -20,8 +20,11 @@ module.exports = {
     "storyStoreV7": true
   },
   viteFinal: async (config) => {
-    // `@`でのインポート
+    // `@`でのインポート(/.nuxt/tsconfig.json)
     config.resolve.alias['@'] = path.resolve(__dirname, "..");
+    config.resolve.alias['#app'] = path.resolve(__dirname, '../node_modules/nuxt/dist/app');
+    config.resolve.alias['#head'] = path.resolve(__dirname, '../node_modules/nuxt/dist/head/runtime');
+    config.resolve.alias['#build'] = path.resolve(__dirname, '../.nuxt');
     return config
   },
 }

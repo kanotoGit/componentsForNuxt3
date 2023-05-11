@@ -1,63 +1,99 @@
 <script lang="ts" setup>
-import { toRefs, useAttrs } from 'vue'
+import { toRefs, useAttrs, computed, nextTick } from 'vue'
 import { isNumber } from '@/utils/index';
 
+interface ValidateResult {
+  isOk: boolean; // バリデーション結果
+  validatedValue: string | number | null; // バリデーション後の値
+}
+
+/** $attrs */
+const $attrs = useAttrs()
+/** plugins */
+const { $dialog } = useNuxtApp()
+
 /** 入力値リセット用 */
-// const isShowInput = ref<boolean>(true)
+const isShowInput = ref<boolean>(true)
+/** input要素 */
+const input = ref<HTMLInputElement | null>(null)
 
 /** props */
 const props = defineProps({
-  // 入力値
+  /* 入力値 */
   text: {
     type: [String, Number] as PropType<string | number | null>,
     default: null,
   },
-  // 入力タイプ
+  /* 入力タイプ */
   type: {
     type: String,
     default: 'text',
   },
-  // 非アクティブ判定
+  /** 非アクティブ判定 */
   disabled: {
     type: Boolean,
     default: false,
   },
-  // 入力値のエラー判定
-  isError: {
-    type: Boolean,
-    default: false,
+  /** 最小数値 */
+  minNumber: {
+    type: Number,
+    default: Number.MIN_SAFE_INTEGER
   },
+  /** 最大数値 */
+  maxNumber: {
+    type: Number,
+    default: Number.MAX_SAFE_INTEGER
+  },
+
+  // 入力値のエラー判定
+  // isError: {
+  //   type: Boolean,
+  //   default: false,
 })
 const { text, type, disabled } = toRefs(props)
 
-/** $attrs */
-const $attrs = useAttrs()
+/** inputタグのtype */
+const typeValue = computed(() => {
+  if (type.value === 'number') {
+    return 'text'
+  }
+  return type.value
+})
+
+/** 入力フォームに表示するテキスト */
+const displayText = computed(() => {
+
+})
 
 /** emit */
 const emit = defineEmits<{
-  (event: 'update:value', value: string | number | null): void
+  (event: 'update:text', value: string | number | null): void
   (event: 'input', value: string | number | null, e: Event): void
   (event: 'change', value: string | number | null, e: Event): void
 }>()
 
 /** 入力イベント */
-function onInput(event: Event) {
+async function onInput(event: Event) {
   if (!disabled.value) {
     const target = event.target as HTMLInputElement
     const { value } = target
-    let reflectValue: any = value || null;
+    let reflectValue: string | number | null = value || null;
 
     // 数値のバリデーションチェック
     if (type.value === 'number') {
-      if (value && validateNumber(value)) {
-        reflectValue = Number(value)
-      } else {
-        reflectValue = null
-        // TODO: エラーアラート
-        console.error('入力値が不正です。', String(value))
+      const validateResult = validateNumber(value)
+      reflectValue = validateResult.validatedValue
+
+      // 想定しない文字が入力された場合、実際の入力値をリセット
+      if (!validateResult.isOk) {
+        await resetInput()
+        // $dialog.error('数値を入力してください')
       }
+    } else {
+      // 数値入力でなければ、そのまま反映
+      reflectValue = value
     }
-    emit('update:value', reflectValue)
+    emit('update:text', reflectValue)
     emit('input', reflectValue, event)
   }
 }
@@ -67,49 +103,74 @@ function onChange(event: Event) {
   if (!disabled.value) {
     const target = event.target as HTMLInputElement
     const { value } = target
-    let reflectValue: any = value || null;
 
-    // 数値のバリデーションチェック
-    if (type.value === 'number') {
-      if (value && validateNumber(value)) {
-        reflectValue = Number(value)
-      } else {
-        reflectValue = null
-        // TODO: エラーアラート
-        console.error('入力値が不正です。', String(value))
-      }
-    }
-    emit('change', reflectValue, event)
+    emit('change', value, event)
   }
 }
 
 /**
- * 数値のバリデーションチェック
- * @param {string | null} value バリデーション対象の値
+ * 入力値のリセット
  */
-function validateNumber(value: string | null): boolean {
-  const maxNumber = Number.MAX_SAFE_INTEGER
-  const minNumber = Number.MIN_SAFE_INTEGER
-  if (value) {
-    if (isNumber(value)) {
-      const number = Number(value)
-      if (minNumber <= number && number <= maxNumber) {
-        // `数値` and `範囲内の数値`の場合は正常
-        return true
-      }
+async function resetInput() {
+  // if (input.value?.value != null) {
+  //   input.value.value = String(text.value ?? '')
+  // }
+
+  isShowInput.value = false
+  await nextTick()
+  isShowInput.value = true
+
+  await nextTick()
+  input.value?.focus?.()
+}
+
+/**
+ * 数値のバリデーションチェック
+ * @param {string} value バリデーション対象の値
+ */
+function validateNumber(value: string): ValidateResult {
+  const result: ValidateResult = { isOk: true, validatedValue: value }
+
+  // 数値入力できない想定の文字を削除した文字列
+  const formatValue = value
+    .replace(/[^0-9.-]/g, '') // [数値.-]以外を削除
+    .replace(/(?<!^)-/g, '') // [先頭のハイフン]以外を削除
+    .replace(/\.(?=.*\.)/g, '') // 2つ目以降のピリオド削除
+
+  // バリデーション後の値の決定
+  if (!formatValue || formatValue === '-') {
+    // 空文字 or `-`の場合は変数に反映しない
+    result.validatedValue = null
+  } else if (isNumber(formatValue)) {
+    // 数値の場合、範囲チェック
+    const number = Number(formatValue)
+    if (minNumber.value <= number && number <= maxNumber.value) {
+      // 範囲内
+      result.validatedValue = number
+    } else {
+      // 範囲外
+      result.validatedValue = text.value
     }
   } else {
-    // `空文字` or `null`の場合は常に正常
-    return true
+    // 数値以外の場合、元に戻す
+    result.validatedValue = text.value
   }
-  return false
+
+  // 数値入力できない想定の文字が入力されている場合、不正判定
+  if (value !== '-' && result.validatedValue != value) {
+    result.isOk = false
+  }
+
+  return result
 }
 </script>
 
 <template>
   <div data-component="TextField">
     <input
-      :type="type"
+      ref="input"
+      v-if="isShowInput"
+      :type="typeValue"
       :value="text"
       :disabled="disabled"
       v-bind="$attrs"

@@ -51,7 +51,6 @@ const props = defineProps({
   //   default: false,
   // },
 })
-const { text, type, disabled } = toRefs(props)
 const { text, type, disabled, minNumber, maxNumber } = toRefs(props)
 
 /** inputタグのtype */

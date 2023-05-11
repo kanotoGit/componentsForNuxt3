@@ -49,8 +49,10 @@ const props = defineProps({
   // isError: {
   //   type: Boolean,
   //   default: false,
+  // },
 })
 const { text, type, disabled } = toRefs(props)
+const { text, type, disabled, minNumber, maxNumber } = toRefs(props)
 
 /** inputタグのtype */
 const typeValue = computed(() => {
